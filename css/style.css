@@ -1,0 +1,70 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Стили для столбцов */
+  .column {
+    background-color: #f0f0f0;
+    border-radius: 6px;
+    display: inline-block;
+    margin: 10px;
+    padding: 10px;
+    vertical-align: top;
+    width: 250px;
+  }
+
+  /* Стили для карточек */
+  .card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 15px;
+
+  }
+
+  /* Стили для кнопок */
+  button {
+    background-color: #428bca;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 5px;
+    padding: 6px 12px;
+  }
+
+  button:hover {
+    background-color: #3071a9;
+  }
+
+  /* Стили для ввода текста */
+  input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 6px 12px;
+    width: 100%;
+  }
+
+  /* Стили для заголовков */
+  h3 {
+    font-size: 18px;
+    margin-top: 0;
+  }
+
+  h4 {
+    font-size: 16px;
+    margin-top: 0;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  /* Стили для добавления карточки */
+  .add-card {
+    margin-top: 10px;
+  }

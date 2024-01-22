@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/vue.js" defer></script>
+    <script src="./js/script.js" defer></script>
+</head>
+<body>
+    <div id="app">
+        <kanban-column v-for="(column, columnIndex) in columns"
+                       :key="columnIndex"
+                       :column="column"
+                       :is-first-column="columnIndex === 0"
+                       @add-card="addCard(columnIndex, $event)"
+                       @move-card="moveCard(columnIndex, $event)"
+                       @return-card="returnCard(columnIndex, $event)">
+        </kanban-column>
+    </div>
+</body>
+</html>
