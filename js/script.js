@@ -4,12 +4,13 @@ Vue.component('kanban-column', {
       <div class="column">
         <h3>{{ column.name }}</h3>
         <div class="card" v-for="(card, cardIndex) in column.cards" :key="cardIndex">
-          <h4>{{ card.title }}</h4>
-          <p>Created: {{ card.created }}</p>
-          <p>{{ card.description }}</p>
-          <p>Deadline: {{ card.deadline }}</p>
+          <h4>Название: {{ card.title }}</h4>
+          <p>Создано: {{ card.created }}</p>
+          <p>Описание: {{ card.description }}</p>
+          <p>Дедлайн до: {{ card.deadline }}</p>
           <p>{{ card.completedOnTime }}</p>
           <p v-if="card.returned">Причина возврата: {{ card.returnReason }}</p>
+          <p>Последнее изменение: {{ card.lastModified }}</p>
           <button v-if="column.name !== 'Выполненные задачи'" @click="moveCard(cardIndex)">Переместить в следующий столбец</button>
           <button v-if="column.name === 'Тестирование'" @click="returnCard(cardIndex)">Переместить в предыдущий столбец</button>
           <button v-if="column.name !== 'Выполненные задачи'" @click="editCard(cardIndex)">Редактировать</button>
@@ -32,7 +33,8 @@ Vue.component('kanban-column', {
       return {
         newCardTitle: '',
         newCardDescription: '',
-        newCardDeadline: ''
+        newCardDeadline: '',
+        lastModified:''
       };
     },
     methods: {
@@ -68,11 +70,14 @@ Vue.component('kanban-column', {
         if (newTitle) {
           this.column.cards[cardIndex].title = newTitle;
         }
+      
         const newDescription = prompt('Введите новое описание карточки:');
         if (newDescription) {
           this.column.cards[cardIndex].description = newDescription;
         }
-      }
+      
+        this.column.cards[cardIndex].lastModified = new Date().toLocaleString();
+      },
     }
   });
   
@@ -107,6 +112,11 @@ Vue.component('kanban-column', {
       moveCard(columnIndex, cardIndex) {
         if (columnIndex + 1 < this.columns.length) {
           const card = this.columns[columnIndex].cards.splice(cardIndex, 1)[0];
+          
+          if (columnIndex + 1 === 2) {
+            card.lastModified = new Date().toLocaleString();
+          }
+      
           if (columnIndex + 1 === 3) {
             const currentDate = new Date();
             const deadlineDate = new Date(card.deadline);
@@ -116,6 +126,7 @@ Vue.component('kanban-column', {
               card.completedOnTime = 'Выполнено в срок';
             }
           }
+      
           this.columns[columnIndex + 1].cards.push(card);
         }
       },
