@@ -12,7 +12,7 @@ Vue.component('kanban-column', {
           <p v-if="card.returned">Причина возврата: {{ card.returnReason }}</p>
           <button v-if="column.name !== 'Выполненные задачи'" @click="moveCard(cardIndex)">Переместить в следующий столбец</button>
           <button v-if="column.name === 'Тестирование'" @click="returnCard(cardIndex)">Переместить в предыдущий столбец</button>
-          <button @click="editCard(cardIndex)">Редактировать</button>
+          <button v-if="column.name !== 'Выполненные задачи'" @click="editCard(cardIndex)">Редактировать</button>
         </div>
         <div class="add-card" v-if="isFirstColumn">
           <label for="newCardTitle">Название карточки:</label>
