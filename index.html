@@ -10,7 +10,10 @@
 </head>
 <body>
     <div id="app">
-        <kanban-column>
+        <kanban-column
+        :key="columnIndex"
+        :column="column"
+        :is-first-column="columnIndex === 0">
         </kanban-column>
     </div>
 </body>
