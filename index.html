@@ -13,7 +13,10 @@
         <kanban-column
         :key="columnIndex"
         :column="column"
-        :is-first-column="columnIndex === 0">
+        :is-first-column="columnIndex === 0"
+        @add-card="addCard(columnIndex, $event)"
+        @move-card="moveCard(columnIndex, $event)"
+        @return-card="returnCard(columnIndex, $event)">
         </kanban-column>
     </div>
 </body>

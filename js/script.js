@@ -9,6 +9,11 @@ Vue.component('kanban-column', {
           <p>Описание: {{ card.description }}</p>
           <p>Дедлайн до: {{ card.deadline }}</p>
           <p>{{ card.completedOnTime }}</p>
+          <p v-if="card.returned">Причина возврата: {{ card.returnReason }}</p>
+          <p>Последнее изменение: {{ card.lastModified }}</p>
+          <button v-if="column.name !== 'Выполненные задачи'" @click="moveCard(cardIndex)">Переместить в следующий столбец</button>
+          <button v-if="column.name === 'Тестирование'" @click="returnCard(cardIndex)">Переместить в предыдущий столбец</button>
+          <button v-if="column.name !== 'Выполненные задачи'" @click="editCard(cardIndex)">Редактировать</button>
         </div>
         <div class="add-card" v-if="isFirstColumn">
           <label for="newCardTitle">Название карточки:</label>
@@ -19,6 +24,7 @@ Vue.component('kanban-column', {
   
           <label for="newCardDeadline">Дэдлайн до:</label>
           <input id="newCardDeadline" type="date" v-model="newCardDeadline" placeholder="Дэдлайн до:" />
+  
           <button @click="addCard">Add Card</button>
         </div>
       </div>
@@ -56,6 +62,19 @@ Vue.component('kanban-column', {
       },
       returnCard(cardIndex) {
         this.$emit('return-card', { cardIndex });
+      },
+      editCard(cardIndex) {
+        const newTitle = prompt('Введите новое название карточки:');
+        if (newTitle) {
+          this.column.cards[cardIndex].title = newTitle;
+        }
+      
+        const newDescription = prompt('Введите новое описание карточки:');
+        if (newDescription) {
+          this.column.cards[cardIndex].description = newDescription;
+        }
+      
+        this.column.cards[cardIndex].lastModified = new Date().toLocaleString();
       },
     }
   });
