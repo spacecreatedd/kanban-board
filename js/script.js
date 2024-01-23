@@ -34,7 +34,7 @@ Vue.component('kanban-column', {
         newCardTitle: '',
         newCardDescription: '',
         newCardDeadline: '',
-        lastModified:''
+        lastModified: ''
       };
     },
     methods: {
@@ -44,16 +44,18 @@ Vue.component('kanban-column', {
           this.newCardDescription.trim() !== '' &&
           this.newCardDeadline.trim() !== ''
         ) {
-          const currentDate = new Date().toLocaleDateString();
-          this.$emit('add-card', {
+        const currentDate = new Date().toLocaleString();
+        const cardData = {
             title: this.newCardTitle,
             created: currentDate,
             description: this.newCardDescription,
             deadline: this.newCardDeadline,
             returnReason: '',
             returned: false,
-            completedOnTime: ''
-          });
+            completedOnTime: '',
+            lastModified: currentDate, 
+        };
+          this.$emit('add-card', cardData);
           this.newCardTitle = '';
           this.newCardDescription = '';
           this.newCardDeadline = '';
@@ -61,6 +63,9 @@ Vue.component('kanban-column', {
       },
       moveCard(cardIndex) {
         this.$emit('move-card', cardIndex);
+        if (columnIndex + 1 === 2 || columnIndex + 1 === 3 || columnIndex + 1 === 4)  {
+            card.lastModified = new Date().toLocaleString();
+          }
       },
       returnCard(cardIndex) {
         this.$emit('return-card', cardIndex);
@@ -70,14 +75,14 @@ Vue.component('kanban-column', {
         if (newTitle) {
           this.column.cards[cardIndex].title = newTitle;
         }
-      
+        this.column.cards[cardIndex].lastModified = new Date().toLocaleString();
         const newDescription = prompt('Введите новое описание карточки:');
         if (newDescription) {
           this.column.cards[cardIndex].description = newDescription;
         }
-      
+  
         this.column.cards[cardIndex].lastModified = new Date().toLocaleString();
-      },
+      }
     }
   });
   
@@ -88,7 +93,7 @@ Vue.component('kanban-column', {
         columns: [
           {
             name: 'Запланированные задачи',
-            cards: [],
+            cards: []
           },
           {
             name: 'Задачи в работе',
@@ -108,15 +113,16 @@ Vue.component('kanban-column', {
     methods: {
       addCard(columnIndex, cardData) {
         this.columns[columnIndex].cards.push(cardData);
+        this.saveData();
       },
       moveCard(columnIndex, cardIndex) {
         if (columnIndex + 1 < this.columns.length) {
           const card = this.columns[columnIndex].cards.splice(cardIndex, 1)[0];
-          
+  
           if (columnIndex + 1 === 2) {
             card.lastModified = new Date().toLocaleString();
           }
-      
+  
           if (columnIndex + 1 === 3) {
             const currentDate = new Date();
             const deadlineDate = new Date(card.deadline);
@@ -126,19 +132,32 @@ Vue.component('kanban-column', {
               card.completedOnTime = 'Выполнено в срок';
             }
           }
-      
+  
           this.columns[columnIndex + 1].cards.push(card);
+          this.saveData();
         }
       },
-      returnCard(columnIndex, cardIndex, returnReason) {
+      returnCard(columnIndex, cardIndex) {
         if (columnIndex - 1 >= 0) {
           const returnReason = prompt('Причина возврата:');
           const card = this.columns[columnIndex].cards.splice(cardIndex, 1)[0];
           card.returned = true;
           card.returnReason = returnReason;
           this.columns[columnIndex - 1].cards.push(card);
+          this.saveData();
+        }
+      },
+      saveData() {
+        localStorage.setItem('kanbanData', JSON.stringify(this.columns));
+      },
+      loadData() {
+        const data = localStorage.getItem('kanbanData');
+        if (data) {
+          this.columns = JSON.parse(data);
         }
       }
+    },
+    created() {
+      this.loadData();
     }
   });
-  
