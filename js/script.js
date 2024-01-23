@@ -60,21 +60,9 @@ Vue.component('kanban-column', {
       moveCard(cardIndex) {
         this.$emit('move-card', cardIndex);
       },
+<<<<<<< HEAD
       returnCard(cardIndex) {
         this.$emit('return-card', { cardIndex });
-      },
-      editCard(cardIndex) {
-        const newTitle = prompt('Введите новое название карточки:');
-        if (newTitle) {
-          this.column.cards[cardIndex].title = newTitle;
-        }
-      
-        const newDescription = prompt('Введите новое описание карточки:');
-        if (newDescription) {
-          this.column.cards[cardIndex].description = newDescription;
-        }
-      
-        this.column.cards[cardIndex].lastModified = new Date().toLocaleString();
       },
     }
   });
@@ -114,15 +102,6 @@ Vue.component('kanban-column', {
           this.columns[columnIndex + 1].cards.push(card);
         }
       },
-      returnCard(columnIndex, cardIndex, returnReason) {
-        if (columnIndex - 1 >= 0) {
-          const returnReason = prompt('Причина возврата:');
-          const card = this.columns[columnIndex].cards.splice(cardIndex, 1)[0];
-          card.returned = true;
-          card.returnReason = returnReason;
-          this.columns[columnIndex - 1].cards.push(card);
-        }
-      }
     }
   });
   
