@@ -10,13 +10,7 @@
 </head>
 <body>
     <div id="app">
-        <kanban-column v-for="(column, columnIndex) in columns"
-                       :key="columnIndex"
-                       :column="column"
-                       :is-first-column="columnIndex === 0"
-                       @add-card="addCard(columnIndex, $event)"
-                       @move-card="moveCard(columnIndex, $event)"
-                       @return-card="returnCard(columnIndex, $event)">
+        <kanban-column>
         </kanban-column>
     </div>
 </body>
