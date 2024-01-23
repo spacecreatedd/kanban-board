@@ -12,6 +12,7 @@ Vue.component('kanban-column', {
           <p v-if="card.returned">Причина возврата: {{ card.returnReason }}</p>
           <button v-if="column.name !== 'Выполненные задачи'" @click="moveCard(cardIndex)">Переместить в следующий столбец</button>
           <button v-if="column.name === 'Тестирование'" @click="returnCard(cardIndex)">Переместить в предыдущий столбец</button>
+          <button @click="editCard(cardIndex)">Редактировать</button>
         </div>
         <div class="add-card" v-if="isFirstColumn">
           <label for="newCardTitle">Название карточки:</label>
@@ -47,7 +48,7 @@ Vue.component('kanban-column', {
             created: currentDate,
             description: this.newCardDescription,
             deadline: this.newCardDeadline,
-            returnReason: '', // Добавляем поле returnReason
+            returnReason: '',
             returned: false,
             completedOnTime: ''
           });
@@ -60,8 +61,17 @@ Vue.component('kanban-column', {
         this.$emit('move-card', cardIndex);
       },
       returnCard(cardIndex) {
-          this.$emit('return-card', { cardIndex });
-        
+        this.$emit('return-card', { cardIndex });
+      },
+      editCard(cardIndex) {
+        const newTitle = prompt('Введите новое название карточки:');
+        if (newTitle) {
+          this.column.cards[cardIndex].title = newTitle;
+        }
+        const newDescription = prompt('Введите новое описание карточки:');
+        if (newDescription) {
+          this.column.cards[cardIndex].description = newDescription;
+        }
       }
     }
   });
@@ -73,7 +83,7 @@ Vue.component('kanban-column', {
         columns: [
           {
             name: 'Запланированные задачи',
-            cards: []
+            cards: [],
           },
           {
             name: 'Задачи в работе',
@@ -114,9 +124,10 @@ Vue.component('kanban-column', {
           const returnReason = prompt('Причина возврата:');
           const card = this.columns[columnIndex].cards.splice(cardIndex, 1)[0];
           card.returned = true;
-          card.returnReason = returnReason; // Записываем причину возврата
+          card.returnReason = returnReason;
           this.columns[columnIndex - 1].cards.push(card);
         }
       }
     }
   });
+  
