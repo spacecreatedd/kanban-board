@@ -62,7 +62,9 @@ Vue.component('kanban-column', {
       moveCard(cardIndex) {
         this.$emit('move-card', cardIndex);
       },
-	
+      returnCard(cardIndex) {
+        this.$emit('return-card', cardIndex);
+      },
       editCard(cardIndex) {
         const newTitle = prompt('Введите новое название карточки:');
         if (newTitle) {
