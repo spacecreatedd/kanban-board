@@ -50,6 +50,8 @@ Vue.component('kanban-column', {
             created: currentDate,
             description: this.newCardDescription,
             deadline: this.newCardDeadline,
+            returnReason: '',
+            returned: false,
             completedOnTime: ''
           });
           this.newCardTitle = '';
@@ -60,9 +62,19 @@ Vue.component('kanban-column', {
       moveCard(cardIndex) {
         this.$emit('move-card', cardIndex);
       },
-<<<<<<< HEAD
-      returnCard(cardIndex) {
-        this.$emit('return-card', { cardIndex });
+	
+      editCard(cardIndex) {
+        const newTitle = prompt('Введите новое название карточки:');
+        if (newTitle) {
+          this.column.cards[cardIndex].title = newTitle;
+        }
+      
+        const newDescription = prompt('Введите новое описание карточки:');
+        if (newDescription) {
+          this.column.cards[cardIndex].description = newDescription;
+        }
+      
+        this.column.cards[cardIndex].lastModified = new Date().toLocaleString();
       },
     }
   });
@@ -98,10 +110,33 @@ Vue.component('kanban-column', {
       moveCard(columnIndex, cardIndex) {
         if (columnIndex + 1 < this.columns.length) {
           const card = this.columns[columnIndex].cards.splice(cardIndex, 1)[0];
-
+          
+          if (columnIndex + 1 === 2) {
+            card.lastModified = new Date().toLocaleString();
+          }
+      
+          if (columnIndex + 1 === 3) {
+            const currentDate = new Date();
+            const deadlineDate = new Date(card.deadline);
+            if (currentDate > deadlineDate) {
+              card.completedOnTime = 'Пропущен срок';
+            } else {
+              card.completedOnTime = 'Выполнено в срок';
+            }
+          }
+      
           this.columns[columnIndex + 1].cards.push(card);
         }
       },
+      returnCard(columnIndex, cardIndex, returnReason) {
+        if (columnIndex - 1 >= 0) {
+          const returnReason = prompt('Причина возврата:');
+          const card = this.columns[columnIndex].cards.splice(cardIndex, 1)[0];
+          card.returned = true;
+          card.returnReason = returnReason;
+          this.columns[columnIndex - 1].cards.push(card);
+        }
+      }
     }
   });
   
