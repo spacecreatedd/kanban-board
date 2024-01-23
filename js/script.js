@@ -54,9 +54,12 @@ Vue.component('kanban-column', {
       moveCard(cardIndex) {
         this.$emit('move-card', cardIndex);
       },
+<<<<<<< HEAD
       returnCard(cardIndex) {
         this.$emit('return-card', { cardIndex });
       },
+=======
+>>>>>>> 38318be5ce03b3e0b3cf59daac70e458af058849
     }
   });
   
@@ -95,15 +98,6 @@ Vue.component('kanban-column', {
           this.columns[columnIndex + 1].cards.push(card);
         }
       },
-      returnCard(columnIndex, cardIndex, returnReason) {
-        if (columnIndex - 1 >= 0) {
-          const returnReason = prompt('Причина возврата:');
-          const card = this.columns[columnIndex].cards.splice(cardIndex, 1)[0];
-          card.returned = true;
-          card.returnReason = returnReason;
-          this.columns[columnIndex - 1].cards.push(card);
-        }
-      }
     }
   });
   
